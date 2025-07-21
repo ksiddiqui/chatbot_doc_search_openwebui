@@ -59,6 +59,18 @@ CONFIG_MAP = [
     {'conf_name': 'top_k_retrieval', 'env_name': 'TOP_K_RETRIEVAL', 'default_value': 10, 'is_required': True},
     {'conf_name': 'top_k_rerank', 'env_name': 'TOP_K_RERANK', 'default_value': 3, 'is_required': True},
 
+    {'conf_name': 'llm_ollama_base_url', 'env_name': 'LLM_OLLAMA_BASE_URL', 'default_value': 'http://localhost:11434', 'is_required': False},
+    {'conf_name': 'llm_ollama_model', 'env_name': 'LLM_OLLAMA_MODEL', 'default_value': 'llama3', 'is_required': False},
+    {'conf_name': 'llm_ollama_temperature', 'env_name': 'LLM_OLLAMA_TEMPERATURE', 'default_value': 0.3, 'is_required': False},
+    {'conf_name': 'llm_ollama_request_timeout', 'env_name': 'LLM_OLLAMA_REQUEST_TIMEOUT', 'default_value': 60.0, 'is_required': False},
+
+    {'conf_name': 'llm_openai_api_key', 'env_name': 'LLM_OPENAI_API_KEY', 'default_value': None, 'is_required': False},
+    {'conf_name': 'llm_openai_model', 'env_name': 'LLM_OPENAI_MODEL', 'default_value': 'gpt-3.5-turbo', 'is_required': False},
+    {'conf_name': 'llm_openai_temperature', 'env_name': 'LLM_OPENAI_TEMPERATURE', 'default_value': 0.3, 'is_required': False},
+    {'conf_name': 'llm_openai_max_tokens', 'env_name': 'LLM_OPENAI_MAX_TOKENS', 'default_value': 1000, 'is_required': False},
+
+    {'conf_name': 'business_domain', 'env_name': None, 'default_value': 'Document Q&A, information retrieval, knowledge base queries, and business-related questions', 'is_required': False},
+
 ]
 
 class ConfigLoader:    

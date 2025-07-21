@@ -28,6 +28,24 @@ if "%1"=="--install" (
     goto :install_mode
 )
 
+if "%1"=="--admin" (
+    echo.
+    echo ========================================
+    echo   Admin Mode
+    echo ========================================
+    echo.
+    goto :admin_mode
+)
+
+if "%1"=="--ui" (
+    echo.
+    echo ========================================
+    echo   Open-WebUI Mode
+    echo ========================================
+    echo.
+    goto :ui_mode
+)
+
 echo.
 echo ========================================
 echo   ChatBot Document Search Server
@@ -50,11 +68,11 @@ if exist ".venv\Scripts\activate.bat" (
 
 echo.
 echo [STEP 2] Starting API server...
-echo Running: python src\api_server.py
+echo Running: python src\server.py
 echo.
 
 REM Step 2: Run the API server
-python src\api_server.py
+python src\server.py
 
 REM Check if the server exited with an error
 if %ERRORLEVEL% neq 0 (
@@ -72,6 +90,90 @@ echo Thank you for using ChatBot Document Search!
 echo.
 pause
 exit /b 0
+
+REM =============================================================================
+REM Admin Mode
+REM =============================================================================
+:admin_mode
+REM Step 1: Activate virtual environment
+echo [STEP 1] Activating virtual environment...
+if exist ".venv\Scripts\activate.bat" (
+    call .venv\Scripts\activate.bat
+    echo ✓ Virtual environment activated successfully
+) else (
+    echo ✗ Virtual environment not found at '.venv\Scripts\activate.bat'
+    echo Please ensure the virtual environment is created in the '.venv' directory
+    pause
+    exit /b 1
+)
+
+echo.
+echo [STEP 2] Starting Admin CLI ...
+echo Running: python src\admin.py
+echo.
+
+REM Step 2: Run the API server
+python src\admin.py
+
+REM Check if the server exited with an error
+if %ERRORLEVEL% neq 0 (
+    echo.
+    echo ✗ Admin CLI exited with error code: %ERRORLEVEL%
+    echo Please check the error messages above
+    pause
+    exit /b %ERRORLEVEL%
+)
+
+echo.
+echo ✓ Admin CLI stopped successfully
+echo.
+echo Thank you for using ChatBot Document Search!
+echo.
+pause
+exit /b 0
+
+REM =============================================================================
+REM UI Mode
+REM =============================================================================
+:ui_mode
+REM Step 1: Activate virtual environment
+echo [STEP 1] Activating virtual environment...
+if exist ".venv\Scripts\activate.bat" (
+    call .venv\Scripts\activate.bat
+    echo ✓ Virtual environment activated successfully
+) else (
+    echo ✗ Virtual environment not found at '.venv\Scripts\activate.bat'
+    echo Please ensure the virtual environment is created in the '.venv' directory
+    pause
+    exit /b 1
+)
+
+echo.
+echo [STEP 2] Starting Admin CLI ...
+echo Running: open-webui serve
+echo.
+
+REM Step 2: Run the API server
+open-webui serve
+
+REM Check if the server exited with an error
+if %ERRORLEVEL% neq 0 (
+    echo.
+    echo ✗ Open-WebUI exited with error code: %ERRORLEVEL%
+    echo Please check the error messages above
+    pause
+    exit /b %ERRORLEVEL%
+)
+
+echo.
+echo ✓ Open-WebUI stopped successfully
+echo.
+echo Thank you for using ChatBot Document Search!
+echo.
+pause
+exit /b 0
+
+
 
 REM =============================================================================
 REM Install Mode - Activated with --install argument

@@ -30,11 +30,12 @@ chat_completion_service = ChatCompletionService()
 
 # Define available models
 MODELS = [
-    {"id": "gpt-3.5-turbo", "name": "GPT-3.5 Turbo"},
-    {"id": "gpt-4", "name": "GPT-4"}
+    {"id": "Pak AI", "model": "pakai-2.1", "object": "model", "owned_by": "NorthBaySolutions"},
+    # {"id": "AWS Bedrock", "model": "claude-3.5-sonnet", "object": "model", "owned_by": "anthropic"},
+    # {"id": "OpenAI GPT", "model": "gpt-4", "object": "model", "owned_by": "openai"},
 ]
 
-@router.get("/health")
+@router.get("/")
 async def health() -> Dict[str, Any]:
     return {"status": True}
     
@@ -46,7 +47,7 @@ async def models() -> Dict[str, Any]:
 async def get_config() -> Dict[str, Any]:
     return {"object": "config", "data": config}
 
-@router.post("/chat/complete")
+@router.post("/chat/completions")
 async def chat_completion(req: ChatRequest) -> Dict[str, Any]:
-    result = await chat_completion_service.chat_completion(req)
-    return ChatCompletionResponse.create_response(result)
+    result = chat_completion_service.chat_completion(req)
+    return ChatCompletionResponse.create_response(result).to_dict()

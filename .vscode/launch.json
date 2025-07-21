@@ -14,10 +14,10 @@
             "console": "integratedTerminal"
         },
         {
-            "name": "Python Debugger: Indexer",
+            "name": "Python Debugger: CLI Admin",
             "type": "debugpy",
             "request": "launch",
-            "program": "src/indexer.py",
+            "program": "src/admin.py",
             "console": "integratedTerminal"
         }
     ]

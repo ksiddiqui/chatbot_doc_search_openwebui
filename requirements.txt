@@ -9,9 +9,11 @@ uvicorn[standard]>=0.24.0
 
 # Data Validation
 pydantic>=2.5.0
+numpy>=1.24.3
 
 # Enhanced Logging and Console Output
 rich>=13.7.0
+roman
 
 # Configuration Management
 PyYAML>=6.0.1
@@ -39,6 +41,15 @@ llama-index-llms-huggingface
 llama-index-core
 pgvector 
 sentence-transformers
+# litellm
+openai
+langchain
+langchain_community
+langchain_openai
+
+# Multi-Agent
+crewai
+crewai-tools
 
 # Standard Library Dependencies (included for completeness)
 # These are built-in Python modules:

@@ -25,8 +25,10 @@ from rich.pretty import Pretty
 from rich import box
 
 from system.setup import do_setup
+from models.chat_completion import ChatRequest
 from services.database import DatabaseManager
 from services.index_documents import DocumentIndexingManager
+from services.chat_completion import ChatCompletionService
 
 config, logger = None, None
 console = None
@@ -42,14 +44,47 @@ def main_menu():
     show_title()
     
     console.print("[cyan]Menu Options:[/cyan]")
-    console.print("1. View names of all indexed documents")
-    console.print("2. Index documents")
-    console.print("3. Test vector store connection")
-    console.print("4. Reset vector store")
-    console.print("5. View configuration")
-    console.print("6. Exit")
-    option = Prompt.ask("\nEnter your choice", choices=["1", "2", "3", "4", "5", "6"])
+    console.print("--------------------------------")
+    console.print("1. Chat with documents")
+    # console.print("")
+    console.print("2. View names of all indexed documents")
+    console.print("3. Index documents")
+    console.print("4. Test vector store connection")
+    console.print("5. Reset vector store")
+    console.print("6. View configuration")
+    # console.print("")
+    console.print("7. Exit")
+    option = Prompt.ask("\nEnter your choice", choices=["1", "2", "3", "4", "5", "6", "7"])
     return option
+
+def chat_with_documents(config):
+    console.clear()
+    show_title()
+    console.print("\nChat with documents:")
+    console.print("----------------------")
+    console.print("Enter 'exit' to return to menu.")
+    console.print("----------------------\n")
+    
+    chat_completion_service = ChatCompletionService()
+    chat_request = ChatRequest(model="ollama", messages=[])
+
+    while True:
+        user_input = Prompt.ask("You")
+        if user_input.lower() == "exit":
+            break
+        chat_request.messages.append({"role": "user", "content": user_input})
+        
+        try:
+            console.print("AI: [bold]Processing...[/bold]")
+            
+            response = chat_completion_service.chat_completion(chat_request)
+            response_to_display = response.get("choices")[0].get("message", {}).get("content", "")
+
+            console.print(response_to_display)
+            chat_request.messages.append({"role": "assistant", "content": response_to_display})
+            
+        except Exception as e:
+            console.print(f"[red]Error: {e}[/red]")
 
 def view_indexed_documents():
     table = Table(title="Indexed Documents")
@@ -114,16 +149,18 @@ def main():
     while True:
         option = main_menu()
         if option == "1":
-            view_indexed_documents()
+            chat_with_documents(config)
         elif option == "2":
-            index_documents(index_documents_manager)
+            view_indexed_documents()
         elif option == "3":
-            test_vector_store_connection(config)
+            index_documents(index_documents_manager)
         elif option == "4":
-            reset_vector_store(config)
+            test_vector_store_connection(config)
         elif option == "5":
-            view_config(config)
+            reset_vector_store(config)
         elif option == "6":
+            view_config(config)
+        elif option == "7":
             console.print("[bold green]Goodbye![/bold green]")
             sys.exit(0)
 

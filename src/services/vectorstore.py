@@ -11,7 +11,7 @@
 # =============================================================================
 
 from llama_index.vector_stores.postgres import PGVectorStore
-# from llama_index.core.index import VectorStoreIndex
+from llama_index.core import VectorStoreIndex
 from llama_index.core import StorageContext
 
 from system.setup import get_config_logger

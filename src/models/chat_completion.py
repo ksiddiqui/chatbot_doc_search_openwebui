@@ -70,3 +70,14 @@ class ChatCompletionResponse(BaseModel):
             choices=[choice],
             usage=usage
         )
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "id": self.id,
+            "object": self.object,
+            "choices": self.choices,
+            "usage": self.usage,
+        }
+        
+    def get(self, key, default=None):
+        return getattr(self, key, self.__dict__.get(key, default))

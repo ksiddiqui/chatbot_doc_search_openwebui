@@ -10,12 +10,14 @@
 # Unauthorized copying or distribution of this file, via any medium, is strictly prohibited.
 # =============================================================================
 
-from uuid import uuid4
-from typing import List
+from typing import List, Tuple, Dict, Any
+
+from llama_index.core import Settings, QueryBundle, get_response_synthesizer, StorageContext, Document, VectorStoreIndex
+from llama_index.core.schema import NodeWithScore
+from llama_index.core.retrievers import VectorIndexRetriever
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
-from llama_index.core import Settings
 from llama_index.core.node_parser import SentenceSplitter
-from llama_index.core import StorageContext, Document, VectorStoreIndex
+import numpy as np
 
 from system.setup import get_config_logger
 from services.vectorstore import VectorStoreManager
@@ -139,3 +141,60 @@ class RAGManager:
 
         self.logger.info("-------------------------------------------------------")
         self.logger.info(f"Ingestion completed successfully with {success_count} document(s).")
+
+
+
+    def _retrieve_nodes(self, query: str, top_k: int) -> List[NodeWithScore]:
+
+        retriever = VectorIndexRetriever(index=self.vs_index, similarity_top_k=top_k)
+        retrieved_nodes = retriever.retrieve(QueryBundle(query_str=query))
+        return retrieved_nodes
+
+    def _rerank_results(self, query: str, nodes: List[NodeWithScore], top_k: int) -> List[NodeWithScore]:
+
+        query_emb = np.array(RAGManager.embed_model.get_text_embedding(query))
+        node_texts = [node.node.text for node in nodes]
+        node_embs = np.array(RAGManager.embed_model.get_text_embeddings(node_texts))
+
+        # Normalize embeddings
+        query_emb_norm = query_emb / np.linalg.norm(query_emb)
+        node_embs_norm = node_embs / np.linalg.norm(node_embs, axis=1, keepdims=True)
+
+        # Cosine similarities
+        similarities = np.dot(node_embs_norm, query_emb_norm)
+
+        # Attach similarity as score, sort, return top_k
+        for node, sim in zip(nodes, similarities):
+            node.score = float(sim)
+        reranked_nodes = sorted(nodes, key=lambda x: x.score or 0, reverse=True)[:top_k]
+        return reranked_nodes
+
+    def query_context_retrieval(self, query: str, retrieve_top_k:int=None, rerank_top_k:int=None) -> Tuple[str, List[Dict[str, Any]], List[str], List[Any]]:
+        if not retrieve_top_k or retrieve_top_k == 0:
+            retrieve_top_k = self.config['top_k_retrieval']
+        if not rerank_top_k or rerank_top_k == 0:
+            rerank_top_k = self.config['top_k_rerank']
+
+        retrieved_nodes = self._retrieve_nodes(query, top_k=retrieve_top_k)
+        reranked_nodes = self._rerank_results(query, retrieved_nodes, top_k=rerank_top_k)
+
+        context_parts, sources, context_used = [], [], []
+        for i, node in enumerate(reranked_nodes):
+            context_parts.append(
+                f"[Source {i + 1} - {node.node.metadata.get('filename', 'Unknown')}]"
+            )
+            context_parts.append(f"Section: {node.node.metadata.get('title', 'N/A')}")
+            context_parts.append(node.node.text)
+            context_parts.append("")
+
+            sources.append(
+                {
+                    "file_name": node.node.metadata.get("filename"),
+                    "section": node.node.metadata.get("title"),
+                    "score": node.score,
+                    "text": node.node.text,
+                }
+            )
+            context_used.append(node.node.text)
+
+        return "\\n".join(context_parts), sources, context_used, retrieved_nodes
