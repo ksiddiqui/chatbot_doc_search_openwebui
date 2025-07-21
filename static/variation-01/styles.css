@@ -1,0 +1,189 @@
+/* Custom Styles for Multi-Agentic Document Search Landing Page */
+
+/* Button Styles */
+.btn-primary {
+    @apply bg-gradient-to-r from-accent-pink to-accent-pink-light text-white px-8 py-3 rounded-lg font-semibold text-lg transition-all duration-300 hover:shadow-lg hover:shadow-accent-pink/25 hover:scale-105 flex items-center justify-center;
+}
+
+.btn-secondary {
+    @apply bg-gradient-to-r from-accent-blue to-accent-blue-light text-white px-8 py-3 rounded-lg font-semibold text-lg transition-all duration-300 hover:shadow-lg hover:shadow-accent-blue/25 hover:scale-105 flex items-center justify-center;
+}
+
+/* Card Styles */
+.card {
+    @apply bg-dark-surface rounded-xl p-6 border border-dark-surface-light hover:border-accent-pink/30 transition-all duration-300 hover:shadow-lg hover:shadow-accent-pink/10;
+}
+
+.card-header {
+    @apply text-center mb-4;
+}
+
+.card-body {
+    @apply text-left;
+}
+
+.info-item {
+    @apply flex justify-between items-center;
+}
+
+.label {
+    @apply text-text-muted font-medium;
+}
+
+.value {
+    @apply text-text-primary font-semibold;
+}
+
+.contact-link {
+    @apply flex items-center space-x-3 text-text-secondary hover:text-accent-blue transition-colors duration-200 p-2 rounded-lg hover:bg-dark-surface-light;
+}
+
+.contact-link i {
+    @apply w-5 text-center;
+}
+
+/* Feature Cards */
+.feature-card {
+    @apply bg-dark-surface rounded-lg p-6 text-center border border-dark-surface-light hover:border-accent-blue/30 transition-all duration-300 hover:shadow-lg hover:shadow-accent-blue/10 hover:transform hover:scale-105;
+}
+
+/* Drawer Styles */
+.drawer {
+    @apply fixed top-0 right-0 h-full w-96 bg-dark-surface border-l border-dark-surface-light transform translate-x-full transition-transform duration-300 ease-in-out z-50 shadow-2xl;
+}
+
+.drawer.open {
+    @apply translate-x-0;
+}
+
+.drawer-content {
+    @apply h-full flex flex-col;
+}
+
+.drawer-header {
+    @apply flex items-center justify-between p-6 border-b border-dark-surface-light bg-gradient-to-r from-accent-pink/10 to-accent-blue/10;
+}
+
+.drawer-body {
+    @apply flex-1 p-6 overflow-y-auto;
+}
+
+.close-btn {
+    @apply w-8 h-8 rounded-full bg-dark-surface-light hover:bg-accent-pink/20 flex items-center justify-center text-text-secondary hover:text-accent-pink transition-colors duration-200;
+}
+
+/* Overlay */
+.overlay {
+    @apply fixed inset-0 bg-black bg-opacity-50 z-40 opacity-0 pointer-events-none transition-opacity duration-300;
+}
+
+.overlay.active {
+    @apply opacity-100 pointer-events-auto;
+}
+
+/* Content Styles for Drawer */
+.drawer-section {
+    @apply mb-6;
+}
+
+.drawer-section h4 {
+    @apply text-lg font-semibold text-accent-pink mb-3 flex items-center;
+}
+
+.drawer-section h4 i {
+    @apply mr-2;
+}
+
+.drawer-section p {
+    @apply text-text-secondary leading-relaxed mb-4;
+}
+
+.drawer-section ul {
+    @apply space-y-2;
+}
+
+.drawer-section li {
+    @apply text-text-secondary flex items-center;
+}
+
+.drawer-section li i {
+    @apply mr-3 text-accent-blue w-4;
+}
+
+.tech-item {
+    @apply bg-dark-surface-light rounded-lg p-4 border border-dark-surface-light hover:border-accent-blue/30 transition-colors duration-200;
+}
+
+.tech-item h5 {
+    @apply font-semibold text-accent-blue mb-2;
+}
+
+.tech-item p {
+    @apply text-sm text-text-muted;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .drawer {
+        @apply w-full;
+    }
+    
+    .btn-primary,
+    .btn-secondary {
+        @apply w-full;
+    }
+}
+
+/* Scrollbar Styling */
+.drawer-body::-webkit-scrollbar {
+    width: 6px;
+}
+
+.drawer-body::-webkit-scrollbar-track {
+    @apply bg-dark-surface-light;
+}
+
+.drawer-body::-webkit-scrollbar-thumb {
+    @apply bg-accent-pink/30 rounded-full;
+}
+
+.drawer-body::-webkit-scrollbar-thumb:hover {
+    @apply bg-accent-pink/50;
+}
+
+/* Animation for cards */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card,
+.feature-card {
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.card:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.card:nth-child(3) {
+    animation-delay: 0.2s;
+}
+
+.feature-card:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.feature-card:nth-child(3) {
+    animation-delay: 0.2s;
+}
+
+.feature-card:nth-child(4) {
+    animation-delay: 0.3s;
+}

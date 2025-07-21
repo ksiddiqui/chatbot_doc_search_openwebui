@@ -1,0 +1,29 @@
+config:
+  fastapi_host: localhost
+  fastapi_port: 9000
+  fastapi_debug: true
+  fastapi_reload: true
+  restapi_prefix: /api/v1
+  web_prefix: null
+
+  log_level: INFO
+  log_format: '%(levelname)s - %(message)s'
+  log_file_path: app.log
+  log_important_file_path: warnings.log
+  log_testing: false
+  
+  data_folder_raw: data/raw
+  data_folder_processed: data/processed
+  
+  postgresql_host: localhost
+  postgresql_port: 5432
+  postgresql_db: document_search
+  postgresql_user: postgres
+  postgresql_pass: mysecretpassword
+  
+  model_embedding: BAAI/bge-large-en
+  
+  chunk_size: 1000
+  chunk_overlap: 200
+  top_k_retrieval: 10
+  top_k_rerank: 3

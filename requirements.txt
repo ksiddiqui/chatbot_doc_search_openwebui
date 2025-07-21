@@ -1,0 +1,53 @@
+# =============================================================================
+# Python Dependencies for ChatBot Document Search Application
+# © 2025 Kashif Ali Siddiqui, Pakistan
+# =============================================================================
+
+# Web Framework
+fastapi>=0.104.1
+uvicorn[standard]>=0.24.0
+
+# Data Validation
+pydantic>=2.5.0
+
+# Enhanced Logging and Console Output
+rich>=13.7.0
+
+# Configuration Management
+PyYAML>=6.0.1
+python-dotenv>=1.0.0
+
+# Document Processing
+docx2pdf>=0.1.8
+docling==2.40.0
+
+# SQL Database
+psycopg2-binary 
+sqlalchemy
+
+# LLM & RAG
+llama-index 
+llama-index-vector-stores-postgres
+llama-index-embeddings-cohere
+llama-index-embeddings-openai
+llama-index-embeddings-huggingface
+llama-index-llms-cohere
+llama-index-llms-openai
+llama-index-llms-bedrock
+llama-index-llms-ollama
+llama-index-llms-huggingface
+llama-index-core
+pgvector 
+sentence-transformers
+
+# Standard Library Dependencies (included for completeness)
+# These are built-in Python modules:
+# - sys
+# - os
+# - time
+# - functools
+# - inspect
+# - pathlib
+# - shutil
+# - logging
+# - typing

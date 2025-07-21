@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Agentic Document Search - Prototype</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'dark-bg': '#0f0f23',
+                        'dark-surface': '#1a1a2e',
+                        'dark-surface-light': '#16213e',
+                        'accent-pink': '#e91e63',
+                        'accent-pink-light': '#f06292',
+                        'accent-blue': '#2196f3',
+                        'accent-blue-light': '#64b5f6',
+                        'text-primary': '#ffffff',
+                        'text-secondary': '#b0bec5',
+                        'text-muted': '#78909c'
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-dark-bg text-text-primary min-h-screen">
+    <!-- Header -->
+    <header class="bg-dark-surface border-b border-dark-surface-light">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-r from-accent-pink to-accent-blue rounded-lg flex items-center justify-center">
+                        <i class="fas fa-robot text-white text-xl"></i>
+                    </div>
+                    <h1 class="text-2xl font-bold bg-gradient-to-r from-accent-pink to-accent-blue bg-clip-text text-transparent">
+                        Multi-Agentic Document Search
+                    </h1>
+                </div>
+                <div class="text-sm text-text-muted">
+                    Prototype v1.0
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-12">
+        <!-- Hero Section -->
+        <section class="text-center mb-16">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-5xl font-bold mb-6 bg-gradient-to-r from-accent-pink via-accent-blue to-accent-pink-light bg-clip-text text-transparent">
+                    Advanced AI-Powered Document Search
+                </h2>
+                <p class="text-xl text-text-secondary mb-8 leading-relaxed">
+                    Experience the future of document retrieval with our cutting-edge multi-agentic system powered by 
+                    Contextual RAG, LlamaIndex, and advanced AI frameworks.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <button id="detailsBtn" class="btn-primary">
+                        <i class="fas fa-info-circle mr-2"></i>
+                        View Details
+                    </button>
+                    <button id="techStackBtn" class="btn-secondary">
+                        <i class="fas fa-cogs mr-2"></i>
+                        Tech Stack
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Info Cards -->
+        <section class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+            <!-- Prototype Info -->
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-flask text-accent-pink text-2xl mb-3"></i>
+                    <h3 class="text-xl font-semibold">Prototype Details</h3>
+                </div>
+                <div class="card-body">
+                    <div class="space-y-3">
+                        <div class="info-item">
+                            <span class="label">Name:</span>
+                            <span class="value">Multi-Agentic Document Search</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Version:</span>
+                            <span class="value">1.0 Beta</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Date:</span>
+                            <span class="value">July 2025</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Developer Info -->
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-user-code text-accent-blue text-2xl mb-3"></i>
+                    <h3 class="text-xl font-semibold">Developer</h3>
+                </div>
+                <div class="card-body">
+                    <div class="space-y-3">
+                        <div class="info-item">
+                            <span class="label">Name:</span>
+                            <span class="value">Kashif Ali Siddiqui</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Location:</span>
+                            <span class="value">Islamabad, Pakistan</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Info -->
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-address-card text-accent-pink-light text-2xl mb-3"></i>
+                    <h3 class="text-xl font-semibold">Connect</h3>
+                </div>
+                <div class="card-body">
+                    <div class="space-y-3">
+                        <a href="https://github.com/ksiddiqui" target="_blank" class="contact-link">
+                            <i class="fab fa-github"></i>
+                            <span>GitHub Profile</span>
+                        </a>
+                        <a href="https://www.linkedin.com/in/ksiddiqui" target="_blank" class="contact-link">
+                            <i class="fab fa-linkedin"></i>
+                            <span>LinkedIn</span>
+                        </a>
+                        <a href="mailto:kashif.ali.siddiqui@gmail.com" class="contact-link">
+                            <i class="fas fa-envelope"></i>
+                            <span>Email</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Preview -->
+        <section class="text-center">
+            <h3 class="text-3xl font-bold mb-8 text-text-primary">Key Features</h3>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="feature-card">
+                    <i class="fas fa-brain text-accent-pink text-3xl mb-4"></i>
+                    <h4 class="font-semibold mb-2">AI-Powered</h4>
+                    <p class="text-sm text-text-secondary">Advanced contextual understanding</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-search text-accent-blue text-3xl mb-4"></i>
+                    <h4 class="font-semibold mb-2">Smart Search</h4>
+                    <p class="text-sm text-text-secondary">Intelligent document retrieval</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-users text-accent-pink-light text-3xl mb-4"></i>
+                    <h4 class="font-semibold mb-2">Multi-Agent</h4>
+                    <p class="text-sm text-text-secondary">Collaborative AI agents</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-rocket text-accent-blue-light text-3xl mb-4"></i>
+                    <h4 class="font-semibold mb-2">High Performance</h4>
+                    <p class="text-sm text-text-secondary">Optimized for speed</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Right Drawer -->
+    <div id="drawer" class="drawer">
+        <div class="drawer-content">
+            <div class="drawer-header">
+                <h3 id="drawerTitle" class="text-xl font-semibold"></h3>
+                <button id="closeDrawer" class="close-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="drawerBody" class="drawer-body">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Overlay -->
+    <div id="overlay" class="overlay"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>

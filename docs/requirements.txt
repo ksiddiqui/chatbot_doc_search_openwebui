@@ -1,0 +1,15 @@
+Please find below the details of the technical exercise. It is designed to assess your expertise in developing an interactive chatbot using a modern Contextual RAG pipeline, integrated with leading open-source tools and frameworks. 
+
+Requirement Overview: You are required to develop an interactive Chatbot within Open WebUI, powered by a Contextual RAG pipeline utilizing the attached documents. 
+
+Technical Stack & Expectations: 
+Document Processing
+Docling Data Pipeline & Storage
+LlamaIndex + PGVector/PostgreSQL RAG Methodology
+Contextual RAG (Anthropic-style) Embedding / LLM / Re-ranking Models
+Locally hosted models via Ollama Agentic Framework
+Crew.AI Prompt Optimization
+Arize Phoenix Prompt Playground Evaluation
+RAGAs LLMOps (Tracing & Debugging)
+Arize Phoenix Chatbot Interface
+Open WebUI Objective
