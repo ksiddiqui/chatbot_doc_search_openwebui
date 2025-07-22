@@ -1,5 +1,7 @@
 # ChatBot Doc Search – Contextual RAG Pipeline
 
+Developed by Kashif Ali Siddiqui, July 2025, Pakistan
+
 ## Overview
 
 This project is an interactive chatbot platform leveraging a contextual Retrieval-Augmented Generation (RAG) pipeline. It enables users to query and interact with document collections using advanced LLMs, semantic search, and agent orchestration. The system is modular, extensible, and designed for both experimentation and production deployment.
