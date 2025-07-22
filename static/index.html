@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Multi-Agentic Document Search – Prototype</title>
+  <link rel="stylesheet" href="styles.css"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/shadcn-ui@latest/dist/shadcn.min.js" defer></script>
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans">
+
+  <!-- Hero -->
+  <main class="min-h-screen flex flex-col items-center justify-center p-8">
+    <h1 class="text-5xl md:text-6xl font-extrabold tracking-tight">
+      <span class="text-pink-500">Multi-Agentic</span>
+      <span class="text-blue-400">Document Search</span>
+    </h1>
+    <p class="mt-4 text-lg text-slate-300">Prototype • July 2025</p>
+
+    <div class="mt-10 flex gap-6">
+      <button id="btn-details"
+              class="px-8 py-4 rounded-xl bg-pink-600 hover:bg-pink-500 text-white font-semibold shadow-xl transition">
+        Details
+      </button>
+      <button id="btn-tech"
+              class="px-8 py-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold shadow-xl transition">
+        Tech Stack
+      </button>
+    </div>
+
+    <footer class="absolute bottom-6 text-sm text-slate-400">
+      Kashif Ali Siddiqui • Islamabad, Pakistan
+    </footer>
+  </main>
+
+  <!-- Drawer -->
+  <aside id="drawer"
+          class="fixed top-0 right-0 h-full w-full max-w-md bg-slate-800 shadow-2xl transform translate-x-full transition-transform duration-300 z-50">
+    <div class="flex justify-between items-center p-5 border-b border-slate-700">
+      <h2 id="drawer-title" class="text-2xl font-bold text-pink-400">Title</h2>
+      <button id="close-drawer"
+              class="text-slate-300 hover:text-pink-400 text-2xl">&times;</button>
+    </div>
+    <div id="drawer-content" class="p-6 overflow-y-auto h-[calc(100%-80px)] text-slate-200">
+      <!-- Content injected by JS -->
+    </div>
+  </aside>
+
+  <script src="app.js"></script>
+</body>
+</html>

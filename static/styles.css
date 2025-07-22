@@ -1,0 +1,11 @@
+/* Tailwind CDN handles 95 % of styling; here we only add shadcn overrides & dark palette */
+
+:root {
+    --pink: #ec4899;
+    --blue: #3b82f6;
+  }
+  
+  /* Smooth scroll for drawer */
+  aside {
+    overscroll-behavior: contain;
+  }

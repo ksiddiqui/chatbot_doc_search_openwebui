@@ -1,0 +1,44 @@
+config:
+  fastapi_host: localhost
+  fastapi_port: 9000
+  fastapi_debug: true
+  fastapi_reload: true
+  restapi_prefix: /api/v1
+  web_prefix: null
+
+  log_level: INFO
+  log_format: '%(levelname)s - %(message)s'
+  log_file_path: app.log
+  log_important_file_path: warnings.log
+  log_testing: false
+  
+  data_folder_raw: data/raw
+  data_folder_processed: data/processed
+  
+  postgresql_host: localhost
+  postgresql_port: 5432
+  postgresql_db: document_search
+  postgresql_user: postgres
+  postgresql_pass: mysecretpassword
+  
+  model_embedding: BAAI/bge-large-en
+  
+  chunk_size: 1000
+  chunk_overlap: 200
+  top_k_retrieval: 10
+  top_k_rerank: 3
+
+  llm_ollama_base_url: http://localhost:11434
+  # llm_ollama_model: llama3
+  llm_ollama_model: llama3:8b-instruct-q2_K
+  # llm_ollama_model: mistral
+  llm_ollama_temperature: 0.4
+  llm_ollama_request_timeout: 60.0
+  
+  llm_openai_api_key: 
+  # llm_openai_model: gpt-4.1-nano-2025-04-14
+  llm_openai_model: gpt-4.1
+  llm_openai_temperature: 0.4
+  llm_openai_max_tokens: 1000
+  
+  business_domain: Document Q&A, information retrieval, knowledge base queries, and business-related questions
