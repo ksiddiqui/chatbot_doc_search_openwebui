@@ -23,6 +23,8 @@ from system.setup import get_config_logger
 from services.vectorstore import VectorStoreManager
 from models.documents import ProcessedDocument
 
+from services.observability import observability_set_contexts
+
 # === Open Source Embedding model constants ===
 EMBEDDING_MODEL_NOMIC = "nomic-embed-text"
 EMBEDDING_MODEL_HF_BGE_SMALL = "BAAI/bge-small-en"
@@ -154,7 +156,8 @@ class RAGManager:
 
         query_emb = np.array(RAGManager.embed_model.get_text_embedding(query))
         node_texts = [node.node.text for node in nodes]
-        node_embs = np.array(RAGManager.embed_model.get_text_embeddings(node_texts))
+        node_embs = np.array([RAGManager.embed_model.get_text_embedding(node_text) for node_text in node_texts])
+        # node_embs = np.array(RAGManager.embed_model.get_text_embeddings(node_texts))
 
         # Normalize embeddings
         query_emb_norm = query_emb / np.linalg.norm(query_emb)
@@ -177,6 +180,8 @@ class RAGManager:
 
         retrieved_nodes = self._retrieve_nodes(query, top_k=retrieve_top_k)
         reranked_nodes = self._rerank_results(query, retrieved_nodes, top_k=rerank_top_k)
+
+        observability_set_contexts(reranked_nodes)
 
         context_parts, sources, context_used = [], [], []
         for i, node in enumerate(reranked_nodes):

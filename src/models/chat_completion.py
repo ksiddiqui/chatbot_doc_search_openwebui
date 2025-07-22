@@ -19,14 +19,23 @@ class ChatRequest(BaseModel):
     model: str
     messages: list
 
+    def get(self, key, default=None):
+        return getattr(self, key, self.__dict__.get(key, default))
+
 
 class RAGRequest(BaseModel):
     query: str
+
+    def get(self, key, default=None):
+        return getattr(self, key, self.__dict__.get(key, default))
 
 
 class ChatMessage(BaseModel):
     role: str
     content: str
+
+    def get(self, key, default=None):
+        return getattr(self, key, self.__dict__.get(key, default))
 
 
 class ChatChoice(BaseModel):
@@ -34,10 +43,16 @@ class ChatChoice(BaseModel):
     message: ChatMessage
     finish_reason: str
 
+    def get(self, key, default=None):
+        return getattr(self, key, self.__dict__.get(key, default))
+
 
 class ChatUsage(BaseModel):
     metadata: Dict[str, Any] = {}
     sources: List[Any] = []
+
+    def get(self, key, default=None):
+        return getattr(self, key, self.__dict__.get(key, default))
 
 
 class ChatCompletionResponse(BaseModel):

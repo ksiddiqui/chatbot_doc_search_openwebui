@@ -15,12 +15,15 @@ import json
 
 from fastapi import HTTPException
 
+from services.observability import observability_reset
 from system.setup import get_config_logger
 from models.chat_completion import ChatRequest, ChatCompletionResponse
-from services.llm_llama_index import LLMManager
+from services.llm_langchain import LLMManager
 from services.rag import RAGManager
 from services.multi_agents import MultiAgentsManager
 from services.query_preprocessor import QueryPreprocessor
+
+from services.observability import observability_reset, observability_set_question, observability_evaluate_now, observability_set_answer
 
 
 class ChatCompletionService:
@@ -28,6 +31,11 @@ class ChatCompletionService:
         self.config, self.logger = get_config_logger()
         self.model_id = 'Ollama'
         self.inference_model = self.config["llm_ollama_model"]
+
+        self.llm_manager = LLMManager()            
+        self.rag_manager = RAGManager()
+        self.multi_agent_system = MultiAgentsManager(self.rag_manager, self.llm_manager)
+        self.query_preprocessor = QueryPreprocessor(self.llm_manager)
 
     def chat_models(self):
         return {"object": "list", "data": ['Ollama']}
@@ -51,7 +59,7 @@ class ChatCompletionService:
 
     def _process_query_when_inappropriate(self, evaluation_result):
         response = {
-            "final_answer": evaluation_result.get("response", "I can only help with questions related to the business domain."),
+            "final_answer": evaluation_result.get("generated_query", "Your query is inappropriate. I can only help with questions related to the business domain."),
             "sources": "",
             "metadata": {
                 "evaluation": evaluation_result,
@@ -60,12 +68,14 @@ class ChatCompletionService:
                 "inference_model": self.inference_model,
             },
         }
+        if not response.get("final_answer") or len(response.get("final_answer").strip()) == 0:
+            response["final_answer"] = "Your query is inappropriate. I can only help with questions related to the business domain."
         
         return response
 
     def _process_query_when_greeting(self, evaluation_result):
         response = {
-            "final_answer": evaluation_result.get("response", "Hello! I'm your AI Assistant, here to help."),
+            "final_answer": evaluation_result.get("generated_query", "Hello! I'm your AI Assistant, here to help."),
             "sources": "",
             "metadata": {
                 "flow_type": "greeting",
@@ -73,6 +83,23 @@ class ChatCompletionService:
                 "inference_model": self.inference_model,
             },
         }
+        if not response.get("final_answer") or len(response.get("final_answer").strip()) == 0:
+            response["final_answer"] = "Hello human! I'm your AI Assistant. How can I help you with your query?"
+        
+        return response
+
+    def _process_query_when_other(self, evaluation_result):
+        response = {
+            "final_answer": evaluation_result.get("generated_query", "Unable to understand your query. I can only help with questions related to the business domain."),
+            "sources": "",
+            "metadata": {
+                "flow_type": "other",
+                "model_id": self.model_id,
+                "inference_model": self.inference_model,
+            },
+        }
+        if not response.get("final_answer") or len(response.get("final_answer").strip()) == 0:
+            response["final_answer"] = "Unable to understand your query. I can only help with questions related to the business domain."
         
         return response
     
@@ -85,8 +112,27 @@ class ChatCompletionService:
         if not optimized_query or len(optimized_query.strip()) == 0:
             optimized_query = question
 
-        result = multi_agent_system.answer_question(optimized_query)
-        original_metadata = result.get("metadata", "")
+        observability_reset()
+        observability_set_question(optimized_query)
+
+        result = self.multi_agent_system.answer_question(optimized_query)
+        if not result:
+            result = {
+                "final_answer": "Unable to find the answer.",
+                "sources": "",
+                "metadata": {
+                    "evaluation": evaluation_result,
+                    "flow_type": "crew_agents",
+                    "original_question": question,
+                    "optimized_query": optimized_query,
+                    "model_id": self.model_id,
+                    "inference_model": self.inference_model,
+                },
+            }
+        original_metadata = result.get("metadata", "") if result else {}
+
+        observability_set_answer(result.get("final_answer", ""))
+        observability_evaluate_now()
 
         # raise Exception("test")
         response = {
@@ -135,20 +181,17 @@ class ChatCompletionService:
             # Extract conversation history for context
             conversation_history = self._get_last_n_pairs(dialogue.messages, 3)
             if conversation_history is None:
-                conversation_history = []
-
-            llm_manager = LLMManager()            
-            rag_manager = RAGManager()
-            multi_agent_system = MultiAgentsManager(rag_manager, llm_manager)
-            query_preprocessor = QueryPreprocessor(llm_manager)
+                conversation_history = []            
             
-            preprocessing_result = query_preprocessor.evaluate_question(query, conversation_history)
-            if not preprocessing_result["is_appropriate"]:
+            preprocessing_result = self.query_preprocessor.evaluate_question(query, conversation_history)
+            if preprocessing_result["type"] == "inappropriate":
                 response = self._process_query_when_inappropriate(preprocessing_result)
             elif preprocessing_result["type"] == "greeting":
                 response = self._process_query_when_greeting(preprocessing_result)
+            elif preprocessing_result["type"] == "other":
+                response = self._process_query_when_other(preprocessing_result)
             else:
-                response = self._process_query_normal(preprocessing_result, query, multi_agent_system)
+                response = self._process_query_normal(preprocessing_result, query, self.multi_agent_system)
 
             result = self._prepare_result(response)
             
@@ -182,7 +225,7 @@ class ChatCompletionService:
             },
         }
 
-        return ChatCompletionResponse.create_response(response_dict)
+        return response_dict
 
     def _get_last_n_pairs(self, messages: list, n: int = 3) -> list:
         conversation_history = []

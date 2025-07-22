@@ -10,53 +10,9 @@
 # Unauthorized copying or distribution of this file, via any medium, is strictly prohibited.
 # =============================================================================
 
-import requests
-from crewai.llm import BaseLLM
+from langchain_openai import ChatOpenAI
 
 from system.setup import get_config_logger
-
-
-class OllamaLLM(BaseLLM):
-    def __init__(self, model, base_url, temperature):
-        self.model = model
-        self.endpoint_chat = base_url + '/api/chat'
-        self.endpoint_generate = base_url + '/api/generate'
-        self.temperature = temperature
-
-    def chat(self, messages, format=None, **kwargs):
-        request_body = {
-            "model": self.model,
-            "messages": [
-                {
-                    "role": "user",
-                    "content": messages
-                }
-            ],
-            "stream": False,
-            "temperature": self.temperature
-        }
-        if format:
-            request_body["format"] = format
-
-        response = requests.post(self.endpoint_chat, json=request_body)
-        response.raise_for_status()
-        return response.json()["message"]["content"]
-
-    def generate(self, messages, format=None, **kwargs):
-        request_body = {
-            "model": self.model,
-            "prompt": messages,
-            "stream": False,
-            "temperature": self.temperature
-        }
-        if format:
-            request_body["format"] = format
-        response = requests.post(self.endpoint_generate, json=request_body)
-        response.raise_for_status()
-        return response.json()["message"]["response"]
-
-    def call(self, messages, **kwargs):
-        return self.chat(messages, **kwargs)
 
 
 SUPPORTED_MODELS_TYPES = ['Ollama-Llama3']
@@ -77,11 +33,13 @@ class LLMManager:
         if self.is_llm_setup:
             return self.llm
 
-        self.llm = OllamaLLM(
-            model=self.llm_ollama_model,
-            base_url=self.llm_ollama_base_url,
-            temperature=self.llm_ollama_temperature,
+        self.llm = ChatOpenAI(
+            api_key=self.config['llm_openai_api_key'],
+            model=self.config['llm_openai_model'],
+            temperature=self.config['llm_openai_temperature'],
+            max_tokens=self.config['llm_openai_max_tokens'],
         )
+
         self.is_llm_setup = True
         return self.llm
 
@@ -94,9 +52,11 @@ class LLMManager:
         """
         if not self.is_llm_setup:
             self.setup_llm()
-        response = self.llm.chat(prompt, **kwargs)
-        # If response is an object with .text, return that; otherwise, return as string
-        return getattr(response, 'text', str(response))
+        response = self.llm.invoke(prompt, **kwargs)
+        response_content = response.content
+        response_metadata = response.response_metadata
+        
+        return response_content
 
     def __call__(self, prompt: str, **kwargs):
         """

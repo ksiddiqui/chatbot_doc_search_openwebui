@@ -29,8 +29,7 @@ def document_search(query: str) -> str:
     CrewAI/LangChain compatible: Search through the document collection to find relevant context and information. Input should be a question or search query. Returns relevant document excerpts with sources.
     """
     try:
-        context = _rag_manager.query_context_retrieval(query)
-        
+        context = _rag_manager.query_context_retrieval(query)        
         return context
     except Exception as e:
         error_msg = f"Error in Document Search Tool. Exception occurred: {str(e)}"
@@ -75,11 +74,12 @@ class MultiAgentsManager:
     def _create_agents(self):
         self.llm = ChatOpenAI(
             api_key=self.config['llm_openai_api_key'],
-            # model=self.config['llm_openai_model'],
+            model=self.config['llm_openai_model'],
             temperature=self.config['llm_openai_temperature'],
             # max_tokens=self.config['llm_openai_max_tokens'],
-            model=f"ollama/{self.inference_model}",
-            base_url=self.llm_ollama_base_url,
+            # temperature=self.config['llm_openai_temperature'],
+            # model=f"ollama/{self.inference_model}",
+            # base_url=self.llm_ollama_base_url,
         )
         
         self.retriever_agent = Agent(

@@ -13,7 +13,8 @@
 from typing import Optional, List, Dict, Any
 
 from system.setup import get_config_logger
-from services.llm_llama_index import LLMManager
+from services.llm_langchain import LLMManager
+# from services.llm_llama_index import LLMManager
 from system.data import convert_to_json
 
 class QueryPreprocessor:
@@ -27,7 +28,6 @@ class QueryPreprocessor:
 
     def evaluate_question(self, query: str, conversation_history: Optional[List[Dict[str, str]]] = None) -> str:
         fallback_result = {
-            "is_appropriate": True,
             "type": "question",
             "reason": "Evaluation failed.",
             "generated_query": query,
@@ -50,7 +50,7 @@ class QueryPreprocessor:
             fallback_result["reason"] = fallback_result["reason"] + f" Failed to convert response to JSON."
             return fallback_result
 
-        required_fields = ["is_appropriate", "type", "reason"]
+        required_fields = ["type", "reason"]
         for field in required_fields:
             if field not in eval_response_json:
                 fallback_result["reason"] = fallback_result["reason"] + f" Missing required field: {field}"
@@ -79,13 +79,15 @@ You will be given:
 
 Your task is to:
 
-1. **Determine if the question is appropriate** in the given business context and conversation flow.
-2. **Classify** the nature of the input — whether it's a:
+1. **Classify** the nature of the input — whether it's a:
    - "question" (e.g., a request for information or clarification),
    - "greeting" (e.g., "hello", "good morning"),
+   - "inappropriate" (e.g., "I want to know your private information", "You are a bad person"),
    - "other" (anything that doesn't fit the above).
-3. **Justify your decisions** for both appropriateness and classification.
-4. If it is a **question**, generate an **optimized version** of the query that incorporates the context from the conversation history for better clarity and relevance.
+2. **Justify your decisions** for both appropriateness and classification.
+3. Based on the classification, 
+    - If it is a **question**, generate an **optimized version** of the query that incorporates the context from the conversation history for better clarity and relevance. 
+    - Otherwise, give me an adequate responsee to the user. Also greet back if the user greets earlier.
 
 ---
 
@@ -103,7 +105,6 @@ Business Domain:
 
 **Output Format (strict JSON):**
 {{
-  "is_appropriate": true,
   "type": "question",
   "reason": "The question builds upon the previous conversation about invoice generation and fits within the domain of enterprise finance tools.",
   "generated_query": "How can we automate invoice generation for recurring clients using our current enterprise finance tool?"

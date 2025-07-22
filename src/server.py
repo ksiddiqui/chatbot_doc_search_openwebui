@@ -16,6 +16,7 @@ import os
 
 # Add current directory to sys.path
 sys.path.append(os.path.dirname(__file__))
+os.environ['OTEL_SDK_DISABLED'] = 'true'
 
 import uvicorn
 from fastapi import FastAPI
