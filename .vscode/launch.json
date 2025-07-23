@@ -17,6 +17,13 @@
             "request": "launch",
             "program": "src/admin.py",
             "console": "integratedTerminal"
+        },
+        {
+            "name": "Python Debugger: RAGAs Evaluation",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "src/rag_eval.py",
+            "console": "integratedTerminal"
         }
     ]
 }
