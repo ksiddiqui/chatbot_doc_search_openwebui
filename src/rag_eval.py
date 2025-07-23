@@ -119,8 +119,8 @@ def run_ragas_on_dataset(my_dataset: List[Dict[str, Any]]):
         generated_answers.append(the_generated_answer)
         
         count += 1        
-        if count > 10:
-            break
+        # if count > 10:
+            # break
 
     # the_data = {
     #     "question": questions,
@@ -142,10 +142,18 @@ def run_ragas_on_dataset(my_dataset: List[Dict[str, Any]]):
         
     result = evaluate(dataset=the_ragas_dataset, metrics=[faithfulness, answer_relevancy, context_recall])
     result_df = result.to_pandas()
+    # in the dataframe, I only want to keep the following columns: question, answer, contexts, ground_truth, faithfulness, answer_relevancy, context_recall
+    result_df = result_df[[
+        'user_input', 
+        # 'response', 
+        # 'retrieved_contexts', 
+        # 'reference', 
+        'faithfulness', 'answer_relevancy', 'context_recall']]
     
     os.makedirs(report_dir, exist_ok=True)
     report_file_suffix = datetime.now().strftime("%Y%m%d_%H%M%S")
-    result_df.to_csv(f"{report_dir}/ragas_report_{report_file_suffix}.csv", index=False)      # Save as CSV
+    result_df.to_csv(f"{report_dir}/ragas_report_{report_file_suffix}.csv", index=False)     
+    result_df.to_excel(f"{report_dir}/ragas_report_{report_file_suffix}.xlsx", index=False)
     result_df.to_json(f"{report_dir}/ragas_report_{report_file_suffix}.json", orient="records")
     
 
