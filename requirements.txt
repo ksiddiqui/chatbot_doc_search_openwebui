@@ -46,6 +46,8 @@ openai
 langchain
 langchain_community
 langchain_openai
+ragas
+datasets
 
 # Multi-Agent
 crewai

@@ -29,6 +29,14 @@ def document_search(query: str) -> str:
     CrewAI/LangChain compatible: Search through the document collection to find relevant context and information. Input should be a question or search query. Returns relevant document excerpts with sources.
     """
     try:
+        # Validate input
+        if not query or not isinstance(query, str):
+            return "Error: Query must be a non-empty string"
+        # Clean and validate query
+        query = query.strip()
+        if not query:
+            return "Error: Query cannot be empty"
+ 
         context = _rag_manager.query_context_retrieval(query)        
         return context
     except Exception as e:

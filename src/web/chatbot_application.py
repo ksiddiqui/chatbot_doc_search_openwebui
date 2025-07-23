@@ -50,4 +50,4 @@ async def get_config() -> Dict[str, Any]:
 @router.post("/chat/completions")
 async def chat_completion(req: ChatRequest) -> Dict[str, Any]:
     result = chat_completion_service.chat_completion(req)
-    return ChatCompletionResponse.create_response(result).to_dict()
+    return result
